@@ -14,7 +14,7 @@ const {
     server_name
 } = require('./config');
 
-const port = 1337;
+const port = 9222;
 const DISCORD_APP_URL = "https://discordapp.com/app";
 const MEME_API = "https://some-random-api.ml/meme"; // Not being used for now
 //const RANDOM_WORDAPI_KEY = 'NW8TVMH0'; // not being used for now
