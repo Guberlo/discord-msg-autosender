@@ -167,7 +167,7 @@ axios.interceptors.response.use(function (response) {
         const tip = ['t!tips', 't!tip'];
 
         let random = Math.floor(Math.random() * 1000 + 5);
-        
+
         // Send work
         setInterval(async() => {
             random = Math.floor(Math.random() * 2);
@@ -177,8 +177,8 @@ axios.interceptors.response.use(function (response) {
             await page.keyboard.press('Enter');
             log(`[+] Farmed ${n_work} times t!work to channel ${flood__channel_}`);
             n_work++;
-            random = Math.floor(Math.random() * 1000 + 5);
-        }, 32000 + random);
+            random = Math.floor(Math.random() * 30000);
+        }, 61 * 10000 + random);
 
         // Send tip
         setInterval(async() => {
@@ -190,7 +190,7 @@ axios.interceptors.response.use(function (response) {
             log(`[+] Farmed ${n_tip} times t!tips to channel ${flood__channel_}`);
             n_tip++;
             random = Math.floor(Math.random() * 1000 + 5);
-        }, 15000 + random);
+        }, 30 * 10000 + random);
 
     } catch (err) {
         log(error(err.toString()));
