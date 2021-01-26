@@ -14,7 +14,7 @@ const {
     server_name
 } = require('./config');
 
-const port = 9222;
+const port = 1337;
 const DISCORD_APP_URL = "https://discordapp.com/app";
 const MEME_API = "https://some-random-api.ml/meme"; // Not being used for now
 //const RANDOM_WORDAPI_KEY = 'NW8TVMH0'; // not being used for now
@@ -44,24 +44,34 @@ axios.interceptors.response.use(function (response) {
 
 
 (async () => {
-    const response = await axios.get(`http://localhost:${port}/json/version`);
+    // const response = await axios.get(`http://localhost:${port}/json/version`);
 
-    if (response.status !== 200) {
-        log(error(`[!] CHECK IF YOUR CHROME/CHROMIUM IS REALLY LISTENING ON PORT ${port}`));
-    } else {
-        log(chalk.bold.green(`[+] Got Response from http://localhost:${port}/json/version`));
-    }
+    // if (response.status !== 200) {
+    //     log(error(`[!] CHECK IF YOUR CHROME/CHROMIUM IS REALLY LISTENING ON PORT ${port}`));
+    // } else {
+    //     log(chalk.bold.green(`[+] Got Response from http://localhost:${port}/json/version`));
+    // }
 
-    const {
-        webSocketDebuggerUrl
-    } = response.data;
-    log(chalk.blue(`[?] Got webSocketDebuggerUrl: ${webSocketDebuggerUrl}`));
+    // const {
+    //     webSocketDebuggerUrl
+    // } = response.data;
+    // log(chalk.blue(`[?] Got webSocketDebuggerUrl: ${webSocketDebuggerUrl}`));
 
-    const browser = await puppeteer.connect({
-        browserWSEndpoint: webSocketDebuggerUrl,
-        defaultViewport: null
-    });
+    const chromeOptions = {
+        headless: true,
+        defaultViewport: null,
+        args: [
+            "--incognito",
+            "--no-sandbox",
+            "--single-process",
+            "--no-zygote"
+        ],
+    };
+
+    const browser = await puppeteer.launch(chromeOptions);
+
     log(chalk.bold.green(`[+] Connected to chrome instance`));
+    
     const page = await browser.newPage();
     await page.setViewport({
         width: 1300,
