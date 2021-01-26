@@ -14,6 +14,8 @@ const {
     server_name
 } = require('./config');
 
+log(chalk.blue(`[INFO] user ${discord_user}, server_name ${server_name}`));
+
 const port = 1337;
 const DISCORD_APP_URL = "https://discordapp.com/app";
 const MEME_API = "https://some-random-api.ml/meme"; // Not being used for now
@@ -71,7 +73,7 @@ axios.interceptors.response.use(function (response) {
     const browser = await puppeteer.launch(chromeOptions);
 
     log(chalk.bold.green(`[+] Connected to chrome instance`));
-    
+
     const page = await browser.newPage();
     await page.setViewport({
         width: 1300,
