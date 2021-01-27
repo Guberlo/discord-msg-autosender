@@ -2,6 +2,7 @@ const axios = require('axios');
 const puppeteer = require('puppeteer');
 const fs = require("fs");
 const inquirer = require("inquirer");
+const proxyChain = require('proxy-chain');
 const chalk = require("chalk");
 const error = chalk.bold.red;
 const warning = chalk.bold.keyword('orange');
@@ -46,18 +47,7 @@ axios.interceptors.response.use(function (response) {
 
 
 (async () => {
-    // const response = await axios.get(`http://localhost:${port}/json/version`);
-
-    // if (response.status !== 200) {
-    //     log(error(`[!] CHECK IF YOUR CHROME/CHROMIUM IS REALLY LISTENING ON PORT ${port}`));
-    // } else {
-    //     log(chalk.bold.green(`[+] Got Response from http://localhost:${port}/json/version`));
-    // }
-
-    // const {
-    //     webSocketDebuggerUrl
-    // } = response.data;
-    // log(chalk.blue(`[?] Got webSocketDebuggerUrl: ${webSocketDebuggerUrl}`));
+    const PROXY = await proxyChain.anonymizeProxy(process.env.QUOTAGUARDSTATIC_URL);
 
     const chromeOptions = {
         headless: true,
@@ -67,7 +57,7 @@ axios.interceptors.response.use(function (response) {
             "--no-sandbox",
             "--single-process",
             "--no-zygote",
-            `--proxy-server=${process.env.QUOTAGUARDSTATIC_URL}`
+            `--proxy-server=${PROXY}`
         ],
     };
 
