@@ -66,7 +66,7 @@ axios.interceptors.response.use(function (response) {
             "--incognito",
             "--no-sandbox",
             "--single-process",
-            "--no-zygote"
+            "--no-zygote",
             `--proxy-server=${process.env.QUOTAGUARDSTATIC_URL}`
         ],
     };
