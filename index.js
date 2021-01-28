@@ -129,19 +129,19 @@ axios.interceptors.response.use(function (response) {
         height: 768
     });
 
-    let flood__channel_ = "";
+    let flood__channel_ = process.env.CHANNEL_NAME;
 
-    await inquirer
-        .prompt([{
-            type: 'checkbox',
-            name: 'channel',
-            message: 'Which channel you want to flood? (only first choice will be considerated)',
-            choices: channels__,
-            default: "general",
-        }, ])
-        .then(answers => {
-            flood__channel_ = answers.channel[0];
-        });
+    // await inquirer
+    //     .prompt([{
+    //         type: 'checkbox',
+    //         name: 'channel',
+    //         message: 'Which channel you want to flood? (only first choice will be considerated)',
+    //         choices: channels__,
+    //         default: "general",
+    //     }, ])
+    //     .then(answers => {
+    //         flood__channel_ = answers.channel[0];
+    //     });
 
     log(chalk.bold.white('[+] Selected channel: ' + chalk.bold.red(`${flood__channel_}`)));
 
