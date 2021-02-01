@@ -17,10 +17,13 @@ const {
 
 log(chalk.blue(`[INFO] user ${discord_user}, server_name ${server_name}`));
 
-const port = 1337;
 const DISCORD_APP_URL = "https://discordapp.com/app";
-const MEME_API = "https://some-random-api.ml/meme"; // Not being used for now
-//const RANDOM_WORDAPI_KEY = 'NW8TVMH0'; // not being used for now
+const FIVE_MIN = 300000;
+const TEN_MIN = FIVE_MIN * 2;
+const THIRTY_MIN = TEN_MIN * 3;
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
+const HALF_DAY = DAY_IN_MS / 2;
+const flood__channel_ = process.env.CHANNEL_NAME;
 
 
 axios.interceptors.request.use(function (config) {
@@ -57,7 +60,7 @@ axios.interceptors.response.use(function (response) {
             "--no-sandbox",
             "--single-process",
             "--no-zygote",
-            `--proxy-server=${PROXY}`
+            // `--proxy-server=${PROXY}`
         ],
     };
 
@@ -129,20 +132,6 @@ axios.interceptors.response.use(function (response) {
         height: 768
     });
 
-    let flood__channel_ = process.env.CHANNEL_NAME;
-
-    // await inquirer
-    //     .prompt([{
-    //         type: 'checkbox',
-    //         name: 'channel',
-    //         message: 'Which channel you want to flood? (only first choice will be considerated)',
-    //         choices: channels__,
-    //         default: "general",
-    //     }, ])
-    //     .then(answers => {
-    //         flood__channel_ = answers.channel[0];
-    //     });
-
     log(chalk.bold.white('[+] Selected channel: ' + chalk.bold.red(`${flood__channel_}`)));
 
     await page.evaluate(({
@@ -164,44 +153,101 @@ axios.interceptors.response.use(function (response) {
 
     log(warning(`[+] Starting channel flood.`));
     try {
-        let n_work = 1;
-        let n_tip = 1;
-        const work = ['t!w', 't!work'];
-        const tip = ['t!tips', 't!tip'];
 
-        let random = Math.floor(Math.random() * 1000 + 5);
-
-        // Send work
-        setInterval(async() => {
-            random = Math.floor(Math.random() * 2);
-            await page.keyboard.type(work[random], {
-                delay: 50
-            });
-            await page.keyboard.press('Enter');
-            log(`[+] Farmed ${n_work} times t!work to channel ${flood__channel_}`);
-            n_work++;
-            random = Math.floor(Math.random() * 30000);
-        }, 61 * 10000 + random);
-
-        // Send tip
-        setInterval(async() => {
-            random = Math.floor(Math.random() * 2);
-            await page.keyboard.type(tip[random], {
-                delay: 50
-            });
-            await page.keyboard.press('Enter');
-            log(`[+] Farmed ${n_tip} times t!tips to channel ${flood__channel_}`);
-            n_tip++;
-            random = Math.floor(Math.random() * 1000 + 5);
-        }, 30 * 10000 + random);
+        workCommand(page);
+        tipCommand(page);
+        overtimeCommand(page);
+        cleanCommand(page);
+        dailyCommand(page);
 
     } catch (err) {
         log(error(err.toString()));
     }
 })();
 
-const sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms))
+function workCommand(page) {
+    const work = ['t!w', 't!work'];
+    let n_work = 1;
+
+    let random = Math.floor(Math.random() * 30000 + 1500);
+    // Send work every 10 minutes or so
+    setInterval(async() => {
+        let random_index = Math.floor(Math.random() * 2);
+        await page.keyboard.type(work[random_index], {
+            delay: 50
+        });
+        await page.keyboard.press('Enter');
+        log(`[+] Farmed ${n_work} times t!work to channel ${flood__channel_}`);
+        n_work++;
+    }, TEN_MIN + random);
+}
+
+function tipCommand(page) {
+    let n_tip = 1;
+    const tip = ['t!tips', 't!tip'];
+
+    let random = Math.floor(Math.random() * 1500 + 400);
+    // Send tip every 5 minutes or so
+    setInterval(async() => {
+        let random_index = Math.floor(Math.random() * 2);
+        await page.keyboard.type(tip[random_index], {
+            delay: 50
+        });
+        await page.keyboard.press('Enter');
+        log(`[+] Farmed ${n_tip} times t!tips to channel ${flood__channel_}`);
+        n_tip++;
+        
+    }, FIVE_MIN + random);
+}
+
+function overtimeCommand(page) {
+    const overtime = ['t!ot', 't!overtime'];
+    let n_ot = 1;
+
+    let random = Math.floor(Math.random() * 30000 + 3000);
+    // Send work every 10 minutes or so
+    setInterval(async() => {
+        let random_index = Math.floor(Math.random() * 2);
+        await page.keyboard.type(overtime[random_index], {
+            delay: 50
+        });
+        await page.keyboard.press('Enter');
+        log(`[+] Farmed ${n_ot} times t!work to channel ${flood__channel_}`);
+        n_ot++;
+    }, THIRTY_MIN + random);
+}
+
+function cleanCommand(page) {
+    const clean = "t!clean";
+    let n_clean = 1;
+
+    let random = Math.floor(Math.random() * 30000 + 4000);
+    // Send work every 10 minutes or so
+    setInterval(async() => {
+        await page.keyboard.type(clean, {
+            delay: 50
+        });
+        await page.keyboard.press('Enter');
+        log(`[+] Farmed ${n_ot} times t!work to channel ${flood__channel_}`);
+        n_clean++;
+    }, HALF_DAY + random);
+}
+
+function dailyCommand(page) {
+    const daily = ["t!d", "t!daily"];
+    let n_daily = 1;
+
+    let random = Math.floor(Math.random() * 30000 + 10000);
+    // Send work every 10 minutes or so
+    setInterval(async() => {
+        let random_index = Math.floor(Math.random() * 2);
+        await page.keyboard.type(daily[random_index], {
+            delay: 50
+        });
+        await page.keyboard.press('Enter');
+        log(`[+] Farmed ${n_daily} times t!work to channel ${flood__channel_}`);
+        n_daily++;
+    }, DAY_IN_MS + random);
 }
 
 async function autoScroll(page) {
